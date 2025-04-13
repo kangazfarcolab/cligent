@@ -77,14 +77,16 @@ class CLIFormatter:
 
         # Create a welcome panel
         welcome_text = """
-        [heading]Sujin - Your Personal CLI Assistant[/heading]
+        [heading]Sujin - Your Personal AI Assistant[/heading]
 
-        Hi, I'm Sujin! I'm here to help you with command line tasks.
+        Hi, I'm Sujin! I'm here to help you with a wide range of tasks.
 
-        • Execute commands with my guidance
-        • Get explanations of command outputs
-        • Ask me questions about your system
-        • Let me help you with complex tasks using natural language
+        • Answer questions on various topics
+        • Provide recommendations and suggestions
+        • Remember your preferences
+        • Execute commands when needed
+        • Help with planning and organization
+        • Assist with creative tasks
         • Provide feedback with [prompt]'helpful'[/prompt] or [prompt]'unhelpful'[/prompt] commands
 
         Type [prompt]'exit'[/prompt] or [prompt]'quit'[/prompt] to exit.

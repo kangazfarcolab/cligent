@@ -1,6 +1,6 @@
 """
-Core agent functionality for the CLI assistant.
-This module provides the core agent functionality for the CLI assistant.
+Core agent functionality for the Sujin personal assistant.
+This module provides the core agent functionality for the Sujin personal assistant.
 """
 
 import os

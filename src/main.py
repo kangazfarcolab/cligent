@@ -1,6 +1,6 @@
 """
-Main entry point for the CLI agent.
-This module provides the main entry point for the CLI agent.
+Main entry point for the Sujin personal assistant.
+This module provides the main entry point for the Sujin personal assistant.
 """
 
 import os
