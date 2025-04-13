@@ -99,58 +99,7 @@ class MetaPluginManager:
         "name": "plugin_generator",
         "description": "Generate a plugin based on requirements",
         "version": "1.0",
-        "prompt_template": """You are an expert Python developer specializing in creating plugins for a CLI agent.
-Create a plugin for the following requirements:
-
-Plugin Name: {name}
-Description: {description}
-Capabilities:
-{capabilities}
-
-Additional Context:
-{additional_context}
-
-The plugin should:
-1. Inherit from the Plugin base class
-2. Implement all required methods (name, description, version, get_capabilities, execute)
-3. Include proper error handling
-4. Be well-documented with docstrings
-5. Follow PEP 8 style guidelines
-
-Here's the Plugin base class definition for reference:
-
-```python
-class Plugin(ABC):
-    @property
-    @abstractmethod
-    def name(self) -> str:
-        """Get the name of the plugin."""
-        pass
-
-    @property
-    @abstractmethod
-    def description(self) -> str:
-        """Get the description of the plugin."""
-        pass
-
-    @property
-    @abstractmethod
-    def version(self) -> str:
-        """Get the version of the plugin."""
-        pass
-
-    @abstractmethod
-    def get_capabilities(self) -> Dict[str, Any]:
-        """Get the capabilities of this plugin."""
-        pass
-
-    @abstractmethod
-    def execute(self, command: str, args: Dict[str, Any]) -> Dict[str, Any]:
-        """Execute a command with this plugin."""
-        pass
-```
-
-Provide the complete plugin code as a Python file.""",
+        "prompt_template": "You are an expert Python developer specializing in creating plugins for a CLI agent. Create a plugin for the following requirements: Plugin Name: {name} Description: {description} Capabilities: {capabilities} Additional Context: {additional_context} The plugin should: 1. Inherit from the Plugin base class 2. Implement all required methods (name, description, version, get_capabilities, execute) 3. Include proper error handling 4. Be well-documented with docstrings 5. Follow PEP 8 style guidelines Here's the Plugin base class definition for reference: class Plugin(ABC): @property @abstractmethod def name(self) -> str: pass @property @abstractmethod def description(self) -> str: pass @property @abstractmethod def version(self) -> str: pass @abstractmethod def get_capabilities(self) -> Dict[str, Any]: pass @abstractmethod def execute(self, command: str, args: Dict[str, Any]) -> Dict[str, Any]: pass Provide the complete plugin code as a Python file.",
         "input_schema": {
             "type": "object",
             "properties": {
