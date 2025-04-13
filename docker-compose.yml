@@ -8,6 +8,9 @@ services:
     volumes:
       - .:/app
       - ./data:/data
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./plugins:/app/plugins
+      - ./templates:/app/templates
     environment:
       - LLM_API_KEY=${LLM_API_KEY}
       - LLM_API_HOST=https://llm.chutes.ai/v1
@@ -16,4 +19,4 @@ services:
       - COLORTERM=truecolor
     stdin_open: true
     tty: true
-    command: --working-dir /data --state-file /data/agent_state.json --verbose
+    command: --working-dir /data --state-file /data/agent_state.json --plugin-dir /app/plugins --templates-dir /app/templates
