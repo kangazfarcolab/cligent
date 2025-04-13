@@ -44,15 +44,17 @@ CLI_THEME = Theme({
 class CLIFormatter:
     """Formatter for the CLI interface."""
 
-    def __init__(self, use_markdown: bool = True, width: Optional[int] = None):
+    def __init__(self, use_markdown: bool = True, width: Optional[int] = None, quiet: bool = False):
         """Initialize the CLI formatter.
 
         Args:
             use_markdown: Whether to render markdown in responses.
             width: Width of the console. If None, auto-detected.
+            quiet: Whether to suppress system messages for a clean CLI experience.
         """
         self.console = Console(theme=CLI_THEME, width=width, highlight=True)
         self.use_markdown = use_markdown
+        self.quiet = quiet
 
         # Detect if we're running in a Docker container
         self.in_docker = os.path.exists("/.dockerenv")
@@ -88,6 +90,13 @@ class CLIFormatter:
         • Help with planning and organization
         • Assist with creative tasks
         • Provide feedback with [prompt]'helpful'[/prompt] or [prompt]'unhelpful'[/prompt] commands
+        • Use plugins with [prompt]'@plugin_name command args'[/prompt] syntax
+
+        [heading]Available Plugins:[/heading]
+        • [prompt]@docker[/prompt] - Docker container and image management
+        • [prompt]@mcp[/prompt] - Model Context Protocol creation and management
+        • [prompt]@nodejs[/prompt] - Node.js, npm, and npx capabilities
+        • [prompt]@plugin_creator[/prompt] - Create new plugins for Sujin
 
         Type [prompt]'exit'[/prompt] or [prompt]'quit'[/prompt] to exit.
         Type [prompt]'stats'[/prompt] to see feedback statistics.
@@ -182,8 +191,10 @@ class CLIFormatter:
         Args:
             message: The system message.
         """
-        self.console.print(f"[system]{message}[/system]")
-        self.console.print()
+        # Skip system messages in quiet mode
+        if not self.quiet:
+            self.console.print(f"[system]{message}[/system]")
+            self.console.print()
 
     def get_user_input(self, prompt_text: str = "> ") -> str:
         """Get user input with a formatted prompt.

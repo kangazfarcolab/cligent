@@ -21,13 +21,17 @@ from .plugins.nodejs_plugin import NodeJSPlugin
 from .plugins.plugin_creator import PluginCreatorPlugin
 
 
-def setup_logging(verbose: bool = False) -> None:
+def setup_logging(verbose: bool = False, quiet: bool = False) -> None:
     """Set up logging configuration.
 
     Args:
         verbose: Whether to enable verbose logging.
+        quiet: Whether to suppress all logs for a clean CLI experience.
     """
-    log_level = logging.DEBUG if verbose else logging.INFO
+    if quiet:
+        log_level = logging.ERROR  # Only show errors in quiet mode
+    else:
+        log_level = logging.DEBUG if verbose else logging.INFO
 
     # Configure root logger
     logging.basicConfig(
@@ -36,9 +40,9 @@ def setup_logging(verbose: bool = False) -> None:
     )
 
     # Set specific loggers to higher levels to suppress their messages
-    logging.getLogger('markdown_it').setLevel(logging.WARNING)
-    logging.getLogger('urllib3').setLevel(logging.WARNING)
-    logging.getLogger('filelock').setLevel(logging.WARNING)
+    logging.getLogger('markdown_it').setLevel(logging.ERROR)
+    logging.getLogger('urllib3').setLevel(logging.ERROR)
+    logging.getLogger('filelock').setLevel(logging.ERROR)
 
 
 def parse_args() -> argparse.Namespace:
@@ -92,6 +96,11 @@ def parse_args() -> argparse.Namespace:
         action="store_true",
         help="Enable verbose logging",
     )
+    parser.add_argument(
+        "--quiet", "-q",
+        action="store_true",
+        help="Suppress all logs for a clean CLI experience",
+    )
 
     return parser.parse_args()
 
@@ -109,10 +118,10 @@ def main() -> None:
         os.makedirs(os.path.dirname(args.state_file), exist_ok=True)
 
     # Set up logging
-    setup_logging(args.verbose)
+    setup_logging(verbose=args.verbose, quiet=args.quiet)
 
     # Initialize the UI formatter
-    formatter = CLIFormatter()
+    formatter = CLIFormatter(quiet=args.quiet)
 
     # Set up LLM configuration
     llm_config = LLMConfig(
