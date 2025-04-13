@@ -1,6 +1,6 @@
-# CLI Agent
+# Sujin CLI Agent
 
-A modular CLI agent powered by LLM that can execute commands and provide intelligent assistance.
+A modular CLI agent powered by LLM that can execute commands and provide intelligent assistance, with self-extension capabilities.
 
 ## Features
 
@@ -9,6 +9,7 @@ A modular CLI agent powered by LLM that can execute commands and provide intelli
 - Maintain conversation context
 - Security validation for commands
 - Docker support for development, testing, and production
+- Self-extension capabilities to create new functionality on demand
 
 ## Architecture
 
@@ -18,6 +19,9 @@ The CLI Agent is built with a highly modular architecture:
 - **CLI Module**: Manages command execution and security
 - **Agent Module**: Coordinates between components and manages state
 - **Memory Module**: Handles persistence and context management
+- **Plugin Module**: Provides extensibility through plugins
+- **MCP Module**: Implements Model Context Protocol for structured LLM interactions
+- **Self-Extension Module**: Enables the agent to create new capabilities on demand
 
 ## Setup
 
@@ -73,7 +77,8 @@ docker-compose up
 - `--model`: Model name to use (default: chutesai/Llama-4-Scout-17B-16E-Instruct)
 - `--working-dir`: Working directory for command execution
 - `--state-file`: Path to state file for saving/loading agent state
-- `--verbose`: Enable verbose logging
+- `--verbose`, `-v`: Enable verbose logging
+- `--quiet`, `-q`: Suppress all logs for a clean CLI experience
 
 ## Development
 
@@ -129,6 +134,27 @@ The CLI Agent includes several security features:
 - Restricted access to sensitive directories
 - Prevention of dangerous commands
 - Configurable security rules
+
+## Self-Extension Capabilities
+
+Sujin can now autonomously create new capabilities when needed:
+
+1. **Analysis**: Analyzes user requests to identify required capabilities
+2. **Gap Detection**: Identifies missing capabilities needed to fulfill requests
+3. **Creation**: Creates new MCP templates, plugins, and Docker configurations
+4. **Integration**: Integrates new capabilities into the existing system
+
+To test the self-extension capabilities, run the `test_self_extension.py` script:
+
+```bash
+export LLM_API_KEY=your_api_key
+./test_self_extension.py
+```
+
+This script tests:
+1. Creating a code analysis capability
+2. Creating a Docker configuration capability
+3. Creating a custom plugin
 
 ## License
 
