@@ -8,6 +8,9 @@ services:
     volumes:
       - .:/app
       - ./test-data:/data
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./plugins:/app/plugins
+      - ./templates:/app/templates
     environment:
       - LLM_API_KEY=${LLM_API_KEY}
       - LLM_API_HOST=https://llm.chutes.ai/v1
@@ -17,4 +20,18 @@ services:
       - COLORTERM=truecolor
     stdin_open: true
     tty: true
-    command: python -m pytest tests/ -v
+    command: python -m pytest tests/ -v --cov=src --cov-report=term --cov-report=html
+
+  self-extension-test:
+    build:
+      context: .
+      dockerfile: Dockerfile.test
+    volumes:
+      - .:/app
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - LLM_API_KEY=${LLM_API_KEY}
+      - LLM_API_HOST=https://llm.chutes.ai/v1
+      - LLM_MODEL_NAME=chutesai/Llama-4-Scout-17B-16E-Instruct
+      - PYTHONPATH=/app
+    command: python test_self_extension.py
