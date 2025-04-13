@@ -97,6 +97,7 @@ class AgentState:
     environment_vars: Dict[str, str] = field(default_factory=dict)
     command_history: List[str] = field(default_factory=list)
     memory: Dict[str, Any] = field(default_factory=dict)
+    feedback: Dict[str, Any] = field(default_factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         """Convert the state to a dictionary."""
@@ -106,6 +107,7 @@ class AgentState:
             "environment_vars": self.environment_vars,
             "command_history": self.command_history,
             "memory": self.memory,
+            "feedback": self.feedback,
         }
 
     @classmethod
@@ -117,6 +119,7 @@ class AgentState:
             environment_vars=data["environment_vars"],
             command_history=data["command_history"],
             memory=data.get("memory", {}),
+            feedback=data.get("feedback", {}),
         )
 
     def save(self, filepath: str) -> None:

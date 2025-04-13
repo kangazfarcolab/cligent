@@ -20,6 +20,7 @@ from ..llm.response import parse_response, ResponseType
 from ..cli.executor import CommandExecutor, CommandResult
 from ..cli.security import SecurityValidator, SecurityPolicy
 from ..memory.manager import MemoryManager
+from ..memory.feedback import FeedbackTracker
 from .state import AgentState, Conversation, Message, MessageRole
 
 logger = logging.getLogger(__name__)
@@ -54,6 +55,12 @@ class Agent:
         else:
             self.memory_manager = MemoryManager()
 
+        # Initialize feedback tracker
+        if self.state.feedback:
+            self.feedback_tracker = FeedbackTracker.from_dict(self.state.feedback, self.memory_manager.storage)
+        else:
+            self.feedback_tracker = FeedbackTracker(self.memory_manager.storage)
+
         # Set working directory
         if working_dir:
             self.state.working_directory = working_dir
@@ -76,12 +83,19 @@ class Agent:
         # Get memory context
         memory_context = self.memory_manager.get_memory_context()
 
+        # Get feedback context
+        feedback_context = self.feedback_tracker.get_feedback_context()
+
         # Create system prompt
         system_prompt = create_system_prompt(cwd=cwd, user=user, os=os_name)
 
         # Add memory context if available
         if memory_context:
             system_prompt += f"\n\nMemory Context:\n{memory_context}"
+
+        # Add feedback context if available
+        if feedback_context:
+            system_prompt += f"\n\nFeedback Context:\n{feedback_context}"
 
         # Add to conversation if not already present
         if not self.state.conversation.messages:
@@ -225,6 +239,9 @@ class Agent:
         """
         # Save memory to state
         self.state.memory = self.memory_manager.to_dict()
+
+        # Save feedback to state
+        self.state.feedback = self.feedback_tracker.to_dict()
 
         # Save state to file
         self.state.save(filepath)

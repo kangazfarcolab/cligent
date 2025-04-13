@@ -85,8 +85,10 @@ class CLIFormatter:
         • Get explanations of command outputs
         • Ask me questions about your system
         • Let me help you with complex tasks using natural language
+        • Provide feedback with [prompt]'helpful'[/prompt] or [prompt]'unhelpful'[/prompt] commands
 
         Type [prompt]'exit'[/prompt] or [prompt]'quit'[/prompt] to exit.
+        Type [prompt]'stats'[/prompt] to see feedback statistics.
         """
 
         welcome_panel = Panel(
@@ -170,6 +172,15 @@ class CLIFormatter:
             error_message: The error message.
         """
         self.console.print(f"[error]Error: {error_message}[/error]")
+        self.console.print()
+
+    def format_system_message(self, message: str) -> None:
+        """Format and print a system message.
+
+        Args:
+            message: The system message.
+        """
+        self.console.print(f"[system]{message}[/system]")
         self.console.print()
 
     def get_user_input(self, prompt_text: str = "> ") -> str:

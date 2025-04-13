@@ -12,6 +12,7 @@ from typing import Optional
 from .agent.core import Agent
 from .llm.config import LLMConfig
 from .ui.formatter import CLIFormatter
+from .cli.feedback import FeedbackCommands
 
 
 def setup_logging(verbose: bool = False) -> None:
@@ -104,6 +105,9 @@ def main() -> None:
     # Display welcome message
     formatter.print_welcome()
 
+    # Initialize feedback commands
+    feedback_commands = FeedbackCommands(agent.feedback_tracker)
+
     # Main interaction loop
     while True:
         try:
@@ -113,6 +117,15 @@ def main() -> None:
             # Check for exit command
             if user_input.lower() in ["exit", "quit"]:
                 break
+
+            # Check for feedback command
+            is_feedback, feedback_message = feedback_commands.process_feedback_command(user_input)
+            if is_feedback:
+                formatter.format_system_message(feedback_message)
+                # Save state if state file is specified
+                if args.state_file:
+                    agent.save_state(args.state_file)
+                continue
 
             # Format user message
             formatter.format_user_message(user_input)

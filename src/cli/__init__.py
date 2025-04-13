@@ -4,5 +4,6 @@ This module provides functionality for executing commands and interacting with t
 """
 
 from .executor import CommandExecutor, CommandResult
+from .feedback import FeedbackCommands
 
-__all__ = ["CommandExecutor", "CommandResult"]
+__all__ = ["CommandExecutor", "CommandResult", "FeedbackCommands"]
