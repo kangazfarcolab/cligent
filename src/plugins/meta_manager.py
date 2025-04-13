@@ -8,6 +8,7 @@ import json
 import logging
 import importlib.util
 from typing import Dict, List, Any, Optional, Union
+from abc import ABC, abstractmethod
 
 from ..llm.client import LLMClient
 from .base import Plugin, PluginManager
