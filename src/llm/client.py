@@ -76,7 +76,7 @@ class LLMClient:
 
         # Extract the text from the response
         # This may need to be adjusted based on the actual API response format
-        return response.get("choices", [{}])[0].get("text", "")
+        return response.get("choices", [{}])[0].get("message", {}).get("content", "")
 
     def generate_completion(
         self,
@@ -100,12 +100,14 @@ class LLMClient:
         Returns:
             The raw API response as a dictionary.
         """
-        url = f"{self.config.api_host}/completions"
+        url = f"{self.config.api_host}/chat/completions"
 
         # Prepare the request payload
         payload = {
             "model": self.config.model_name,
-            "prompt": prompt,
+            "messages": [
+                {"role": "user", "content": prompt}
+            ],
             "temperature": temperature if temperature is not None else self.config.temperature,
             "max_tokens": max_tokens if max_tokens is not None else self.config.max_tokens,
             "top_p": top_p if top_p is not None else self.config.top_p,
@@ -114,7 +116,7 @@ class LLMClient:
         }
 
         # Log the request for debugging
-        logger.debug(f"Sending request to {self.config.api_host}/completions")
+        logger.debug(f"Sending request to {url}")
         logger.debug(f"Headers: {self._get_headers()}")
         logger.debug(f"Payload: {payload}")
 
