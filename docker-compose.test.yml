@@ -1,0 +1,20 @@
+version: '3'
+
+services:
+  cli-agent-test:
+    build:
+      context: .
+      dockerfile: Dockerfile.test
+    volumes:
+      - .:/app
+      - ./test-data:/data
+    environment:
+      - LLM_API_KEY=${LLM_API_KEY}
+      - LLM_API_HOST=https://llm.chutes.ai/v1
+      - LLM_MODEL_NAME=chutesai/Llama-4-Scout-17B-16E-Instruct
+      - PYTHONPATH=/app
+      - TERM=xterm-256color
+      - COLORTERM=truecolor
+    stdin_open: true
+    tty: true
+    command: python -m pytest tests/ -v
